@@ -4,9 +4,9 @@
         return preg_replace("/[^0-9]/", "", $str); 
       }
 
-     $erro = false;
+     
     if(count($_POST) > 0) {
-       
+       $erro = false;
        include('conexao.php');
 
        $nome = $_POST['nome'];
@@ -44,8 +44,10 @@
         $sql_code = "INSERT INTO clientes (nome, email, nascimento, telefone, data) VALUES ('$nome', '$email', '$nascimento', '$telefone', NOW())";
         
         $deu_certo = $mysqli->query($sql_code) or die($mysqli->error);
+       
         if($deu_certo) {
-            echo "cliente cadastrado";
+            echo "<p><b>cliente cadastrado com sucesso</b></p>";
+            unset($_POST);
         }
     }
 
