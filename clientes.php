@@ -19,7 +19,7 @@ $num_clientes = $query_clientes->num_rows;
     <a href="cadastrar_cliente.php">Formulário</a>
     <h2>Lista de Clientes</h2>
 
-    <table class="table container">
+    <table class="table ">
         <theady>
             <th>ID</th>
             <th>Data</th>
@@ -27,7 +27,7 @@ $num_clientes = $query_clientes->num_rows;
             <th>E-mail</th>
             <th>Nascimento</th>
             <th>Telefone<th>           
-           
+          
             
         </theady>
         <tbody>
@@ -38,15 +38,37 @@ $num_clientes = $query_clientes->num_rows;
             </tr>
             <?php }else { 
                 while($cliente = $query_clientes->fetch_assoc()) {
+
+                // tratamento telefone    
+                $telefone = "Não informado"; //qdo nao existir
+                if(!empty($cliente['telefone'])) {
+                    $ddd = substr($cliente['telefone'], 0, 2);
+                    $parte1 = substr($cliente['telefone'], 2, 5);
+                    $parte2 = substr($cliente['telefone'], 7); // parte final nao precisa
+                    $telefone = "($ddd) $parte1-$parte2";
+                }
+                //tratamento data nascimento
+                $nascimento = "Não informado";
+                if(!empty($cliente['nascimento'])) {
+                    $temporario = array_reverse(explode('-', $cliente['nascimento']));
+                    $nascimento = implode('/', $temporario); //pode por na mesma linha tbm
+                }
+
+                // tratamento data cadastro
+                $data_cadastro = date("d/m/Y H:i", strtotime($cliente['data']));
+                
             ?>
             <tr>
                 <td><?php echo $cliente['id'] ?></td>
-                <td><?php echo $cliente['data'] ?></td>
+                <td><?php echo $data_cadastro ?></td>
                 <td><?php echo $cliente['nome'] ?></td>
                 <td><?php echo $cliente['email'] ?></td>
-                <td><?php echo $cliente['nascimento'] ?></td>
-                <td><?php echo $cliente['telefone'] ?></td>
-                
+                <td><?php echo $nascimento ?></td>
+                <td><?php echo $telefone ?></td>
+                <td>
+                    <a href="editar_cliente.php?id=<?php echo $cliente['id'] ?>" class="btn btn-primary">Editar</a>
+                    <a href="deletar_cliente.php?id=<?php echo $cliente['id'] ?>" class="btn btn-danger">Deletar</a>
+                </td>
                                      
                 
             </tr>
